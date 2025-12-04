@@ -1,0 +1,51 @@
+{
+	pkgs,
+	lib,
+	writeText,
+	config ? null, 
+	patches ? [ ],
+	... 
+}:
+pkgs.stdenv.mkDerivation {
+	name = "dwmblocks-async";
+	system = "x86_64-linux";
+	meta = {
+		description = ''
+			dwmblocks is a status bar for dwm that allows you to define sections of your status bar that update independently of one-another.
+		'';
+	};
+	
+	buildInputs = with pkgs; [
+		pkg-config 
+		xorg.libX11 
+		xorg.libxcb
+		xorg.xcbutil
+		xorg.xcbutilwm
+		alsa-lib
+	];
+	
+	src = pkgs.fetchFromGitHub {
+		owner = "UtkarshVerma";
+		repo = "dwmblocks-async";
+		rev = "38cadc6427db51700b3add3c356da5d41b36f8e0";
+		hash = "sha256-E3Jk+Cpcvo7/ePEdi09jInDB3JqLwN+ZHtutk3nmmhM=";
+	};
+
+	inherit patches;
+	
+	# Allow user
+	postPatch = 
+		let 
+			config_file = if lib.isDerivation config || builtins.isPath config then 
+				config
+			else 
+				writeText "config.h" config;
+		in
+		lib.optionalString (config != null) "cp ${config_file} config.h";
+		
+	installPhase = ''
+		make PREFIX=$out install
+	'';
+	
+}
+
