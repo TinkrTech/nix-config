@@ -1,21 +1,10 @@
-#Edit this configuration file to define what should be installed on
-# your system.	Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, inputs, ... }:
-
 {
-	imports = [ # Include the results of the hardware scan.
+	imports = [ 
 		./hardware-configuration.nix
-		inputs.nixvim.nixosModules.nixvim
+		./configs/nixvim.nix
 		inputs.sops.nixosModules.sops
 	];
-	
-#	nixpkgs.overlays = [
-#		(final: prev: {
-#			dwm = prev.dwm.overrideAttrs
-#		})
-#	];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	boot = {
@@ -95,10 +84,6 @@
 	services.xserver.enable = true;
 	services.xserver.windowManager.dwm = {
 		enable = true;
-#		package = pkgs.dwm.overrideAttrs {
-#			src = ./srcs/dwm;	
-#		};
-
 		package = pkgs.dwm.overrideAttrs {
 			src = pkgs.fetchFromGitHub {
 				owner = "BreadOnPenguins";
@@ -179,51 +164,6 @@
 		enable = true;
 		pinentryPackage = pkgs.pinentry-curses;
 		enableSSHSupport = true;
-	};
-	# services.pcscd.enable = true;
-
-	programs.nixvim = {
-		enable = true;
-		defaultEditor = true;
-	 	opts = {
-			number = true;
-			relativenumber = true;
-			tabstop = 4;
-			shiftwidth = 4;
-		};
-		globals.mapleader = " ";
-		keymaps = [
-			{
-				mode = "n";
-				key = "<leader>w";
-				action = ":w<CR>";
-			}
-		];
-		colorschemes.catppuccin.enable = true;
-	
-		plugins = {
-			which-key.enable = true;
-			telescope.enable = true;
-			oil.enable = true;
-			treesitter.enable = true;
-			web-devicons.enable = true;
-		};
-
-		plugins.lsp = {
-			enable = true;
-			servers = { 
-				pylsp.enable = true;
-			};
-		};
-
-		plugins.cmp = {
-			enable = true;
-			autoEnableSources = true;
-		};
-
-		filetype.extension = {
-			drv = "nix";
-		};
 	};
 
 	programs.git.enable = true;
