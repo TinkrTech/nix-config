@@ -18,9 +18,9 @@
 
 // Define blocks for the status feed as X(icon, cmd, interval, signal).
 #define BLOCKS(X)             \
-    X("", "/home/jade/scripts/get-battery-info.sh", 5, 10) \
-	X("", "/home/jade/scripts/get-wifi-strength.sh", 1, 11) \ 
-	X("", "date +\"%d %b @ %H:%M\"", 1, 12)
-    // X("", "sb-volume", 0, 8)  \
-
+	X("", "/home/jade/scripts/get-volume.sh", 0, 10) \
+    X("", "/home/jade/scripts/get-battery-info.sh", 5, 11) \
+	X("", "/home/jade/scripts/get-wifi-strength.sh", 1, 12) \ 	
+	X("", "date +\"%d %b @ %H:%M\"", 1, 13)
+	
 #endif  // CONFIG_H

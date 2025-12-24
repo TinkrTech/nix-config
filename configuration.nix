@@ -63,7 +63,7 @@
 		extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 	};
 	services.flatpak = {
-		enable = true;
+		enable = false;
 		packages = [
 			"com.Bitwarden.desktop"	
 		];
