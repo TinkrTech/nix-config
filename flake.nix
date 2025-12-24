@@ -11,6 +11,9 @@
 			url = "github:Mic92/sops-nix";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+		flatpak = {
+			url = "github:gmodena/nix-flatpak";
+		};
 	};
 
 	outputs = { self, nixpkgs, home-manager, ... } @ inputs: 
@@ -24,6 +27,7 @@
 			modules = [
 				./configuration.nix
 				inputs.sops.nixosModules.sops
+				inputs.flatpak.nixosModules.nix-flatpak
 			];
 		};
 		homeConfigurations.jade = home-manager.lib.homeManagerConfiguration {

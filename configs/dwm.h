@@ -128,9 +128,9 @@ static const Layout layouts[] = { /* alt glyphs: 󱡗 󱏋 */
 static char dmenumon[2] 		= "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] 	= { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  	= { "kitty", NULL };
-static const char *upvol[] 		= { "pactl", "set-sink-volume", "0", "+5%", 	NULL };
-static const char *downvol[] 	= { "pactl", "set-sink-volume", "0", "-5%", 	NULL };
-static const char *mutevol[]	= { "pactl", "set-sink-mute", 	"0", "toggle", 	NULL };
+static const char *upvol[] 		= { "pamixer", "-i", "5", 	NULL };
+static const char *downvol[] 	= { "pamixer", "-d", "5", 	NULL };
+static const char *mutevol[]	= { "pamixer", "-t", 		NULL };
 
 static const Arg tagexec[] = { /* spawn application when tag is middle-clicked */
 	{ .v = termcmd }, /* 1 */

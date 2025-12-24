@@ -5,6 +5,7 @@
 		./configs/nixvim.nix
 		./configs/network.nix
 		inputs.sops.nixosModules.sops
+		inputs.flatpak.nixosModules.nix-flatpak
 	];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -51,7 +52,22 @@
 		alsa.support32Bit = true;
 		pulse.enable = true;
 	};
-
+	
+	xdg.portal = {
+		enable = true;
+		config = {
+			common = {
+				default = [ "gtk" ];
+			};
+		};
+		extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+	};
+	services.flatpak = {
+		enable = true;
+		packages = [
+			"com.Bitwarden.desktop"	
+		];
+	};
 	# Define a user account. Don't forget to set a password with ‘passwd’.
 	users.users.jade = {
 		isNormalUser = true;
@@ -90,6 +106,9 @@
 		pinentry-curses
 		sops
 		htop
+		pamixer
+		libnotify
+		dunst
 	];
 	
 	sops = {
