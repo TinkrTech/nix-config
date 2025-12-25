@@ -11,6 +11,7 @@ let
 
 		# NixOS Aliases
 		rebuild = "sudo nixos-rebuild switch --flake ~/nixos";
+		test-cfg = "sudo nixos-rebuild test --flake ~/nixos";
 		cleanup = "sudo nix-collect-garbage -d";
 		list-gen = "nixos-rebuild list-generations";
 		# Home-Manager Aliases
