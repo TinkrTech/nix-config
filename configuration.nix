@@ -42,7 +42,7 @@
 		};
 		extraSessionCommands = "dwmblocks &";
 	};
-	
+
 	# Audio config
 	services.pulseaudio.enable = false;
 	security.rtkit.enable = true;
@@ -109,8 +109,10 @@
 		pamixer
 		libnotify
 		dunst
+		betterlockscreen
 	];
-	
+	security.pam.services.i3lock.enable = true;
+
 	sops = {
 		defaultSopsFile = ./secrets/secrets.yaml;
 		defaultSopsFormat = "yaml";
@@ -131,8 +133,8 @@
 		enableSSHSupport = true;
 	};
 
+	programs.bat.enable = true;	
 	programs.git.enable = true;
-	programs.bat.enable = true;
 
 	# This value determines the NixOS release from which the default
 	# settings for stateful data, like file locations and database versions
