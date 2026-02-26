@@ -57,6 +57,25 @@
 		extraSessionCommands = "dwmblocks &";
 	};
 
+	systemd.services.lock-on-sleep = {
+		description = "Lock the screen before sleeping";
+		after = [ "sleep.target" ];
+		wantedBy = [ "sleep.target" ];
+
+		serviceConfig = {
+			Type = "oneshot";
+			User = "jade";
+			Environment = "DISPLAY=:0 XAUTHORITY=/home/jade/.Xauthority";
+			ExecStart = ''${pkgs.betterlockscreen}/bin/betterlockscreen -l'';
+		};
+	};
+	
+	services.logind = {
+		lidSwitch = "suspend";
+		lidSwitchExternalPower = "suspend";
+		lidSwitchDocked = "ignore";
+	};
+	
 	# Audio config
 	services.pulseaudio.enable = false;
 	security.rtkit.enable = true;
@@ -124,6 +143,7 @@
 		libnotify
 		dunst
 		betterlockscreen
+		jq
 	];
 	security.pam.services.i3lock.enable = true;
 
