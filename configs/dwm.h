@@ -162,8 +162,8 @@ static const Key keys[] = {
 	STACKKEYS(MODKEY|ShiftMask,					push)
 	{ MODKEY|ShiftMask,				XK_i,		incnmaster,		{.i = +1 } }, /* increase # of master windows */
 	{ MODKEY|ControlMask,			XK_i,		incnmaster,		{.i = -1 } }, /* decrease # of master windows */
-	{ MODKEY,						XK_h,		setmfact,		{.f = -0.05} },
-	{ MODKEY,						XK_l,		setmfact,		{.f = +0.05} },
+	{ MODKEY|ShiftMask,				XK_h,		setmfact,		{.f = -0.05} },
+	{ MODKEY|ShiftMask,				XK_l,		setmfact,		{.f = +0.05} },
 
 	// Change Workspaces
 	{ MODKEY,						XK_Tab,			view,		{0} },
