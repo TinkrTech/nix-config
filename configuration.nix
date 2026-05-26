@@ -147,6 +147,7 @@
 		dunst
 		betterlockscreen
 		jq
+		ripgrep
 	];
 	security.pam.services.i3lock.enable = true;
 
