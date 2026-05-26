@@ -3,6 +3,8 @@
 	imports = [ inputs.nixvim.nixosModules.nixvim ];
 	programs.nixvim = {
 		enable = true;
+		# Suppress nixpkgs mismatch warning
+		nixpkgs.pkgs = pkgs;
 		defaultEditor = true;
 	 	opts = {
 			number = true;

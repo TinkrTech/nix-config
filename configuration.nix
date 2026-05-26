@@ -45,15 +45,18 @@
 	services.xserver.enable = true;
 	services.xserver.windowManager.dwm = {
 		enable = true;
-		package = pkgs.dwm.overrideAttrs {
+		package = pkgs.dwm.overrideAttrs(oldAttrs: {
 			src = pkgs.fetchFromGitHub {
 				owner = "BreadOnPenguins";
 				repo = "dwm";
 				rev = "4632e24484e444e7985d4675393d71d9509e066b";
 				hash = "sha256-gR14bC9gcRKBFStW/YxyVtGAEiegx54I/VDIOtRfzfM=";
 			};
+			buildInputs = with pkgs; (oldAttrs.buildInputs or []) ++ [
+				libxcb
+			];
 			postPatch = "cp ${./configs/dwm.h} config.def.h";
-		};
+		});
 		extraSessionCommands = "dwmblocks &";
 	};
 
@@ -70,10 +73,10 @@
 		};
 	};
 	
-	services.logind = {
-		lidSwitch = "suspend";
-		lidSwitchExternalPower = "suspend";
-		lidSwitchDocked = "ignore";
+	services.logind.settings.Login = {
+		HandleLidSwitch = "suspend";
+		HandleLidSwitchExternalPower = "suspend";
+		HandleLidSwitchDocked = "ignore";
 	};
 	
 	# Audio config

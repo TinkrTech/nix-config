@@ -17,10 +17,10 @@ pkgs.stdenv.mkDerivation {
 	
 	buildInputs = with pkgs; [
 		pkg-config 
-		xorg.libX11 
-		xorg.libxcb
-		xorg.xcbutil
-		xorg.xcbutilwm
+		libx11 
+		libxcb
+		libxcb-util
+		libxcb-wm
 		alsa-lib
 	];
 	

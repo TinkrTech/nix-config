@@ -1,10 +1,13 @@
 {
 	description = "Jade's NixOS Config";
 	inputs = {
-		nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
-		nixvim.url = "github:nix-community/nixvim?ref=nixos-25.05";
+		nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
+		nixvim = {
+			url = "github:nix-community/nixvim/nixos-26.05";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 		homemanager = {
-			url = "github:nix-community/home-manager?ref=release-25.05";
+			url = "github:nix-community/home-manager?ref=release-26.05";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		sops = {
@@ -15,7 +18,7 @@
 			url = "github:gmodena/nix-flatpak";
 		};
 	};
-
+	
 	outputs = { self, nixpkgs, home-manager, ... } @ inputs: 
 	let
 		lib = nixpkgs.lib;
