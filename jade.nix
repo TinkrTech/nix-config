@@ -71,20 +71,23 @@ in
 	programs.bash = {
 		enable = true;
 		shellAliases = aliases;
+		historyControl = ["erasedups" "ignoreboth"];
 	};
 
 	programs.git = {
 		enable = true;
-		userName = "Jade";
-		userEmail = "jade@tinker.tech";
-		aliases = {
-			lg = "log --oneline";
-			lgbt = "lg --graph main..HEAD";
-			fixup = "commit --fixup HEAD";
-		};
-		extraConfig = {
+		settings = {
+			user = {
+				name = "Jade";
+				email = "jade@tinkrtech.net";
+			};
 			init.defaultBranch = "main";
 			core.sshCommand = "ssh -i ~/.ssh/github";
+			alias = {
+				lg = "log --oneline";
+				lgbt = "lg --graph main..HEAD";
+				fixup = "commit --fixup HEAD";
+			};
 		};
 	};
 	
