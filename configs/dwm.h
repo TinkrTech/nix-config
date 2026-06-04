@@ -131,7 +131,8 @@ static const char *termcmd[]  	= { "kitty", NULL };
 static const char *upvol[] 		= { "bash", "-c", "pamixer -i 5; pkill -10 dwmblocks",	NULL };
 static const char *downvol[] 	= { "bash", "-c", "pamixer -d 5; pkill -10 dwmblocks", 	NULL };
 static const char *mutevol[]	= { "bash", "-c", "pamixer -t; pkill -10 dwmblocks", 		NULL };
-
+static const char *disable_screensaver[] = { "bash", "-c", "xset -dpms; xset s off", NULL };
+static const char *enable_screensaver[] = { "bash", "-c", "xset +dpms; xset s on", NULL }; 
 static const Arg tagexec[] = { /* spawn application when tag is middle-clicked */
 	{ .v = termcmd }, /* 1 */
 	{ .v = termcmd }, /* 2 */
@@ -155,7 +156,9 @@ static const Key keys[] = {
 	{ 0,			XF86XK_AudioRaiseVolume,	spawn,			{.v = upvol}},
 	{ 0,			XF86XK_AudioLowerVolume,	spawn, 			{.v = downvol}},
 	{ 0,			XF86XK_AudioMute,			spawn,			{.v = mutevol}},
-	
+	// Disable ScreenSaver via F7, re-enable via FN + F7
+	{ 0,			XK_F7,						spawn,			{.v = disable_screensaver }}, 
+	{ 0,			XF86XK_ScreenSaver,			spawn,			{.v = enable_screensaver }},
 
 	{ MODKEY|ShiftMask,				XK_b,		togglebar,		{0} },
 	STACKKEYS(MODKEY,							focus)
