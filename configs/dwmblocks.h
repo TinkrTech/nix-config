@@ -20,7 +20,8 @@
 #define BLOCKS(X)             \
 	X("", "/home/jade/scripts/get-volume.sh", 0, 10) \
     X("", "/home/jade/scripts/get-battery-info.sh", 5, 11) \
-	X("", "/home/jade/scripts/get-wifi-strength.sh", 1, 12) \ 	
-	X("", "date +\"%d %b @ %H:%M\"", 1, 13)
+	X("", "/home/jade/scripts/get-sleep-mode.sh", 0, 12) \
+	X("", "/home/jade/scripts/get-wifi-strength.sh", 1, 13) \ 	
+	X("", "date +\"%d %b @ %H:%M\"", 1, 14)
 	
 #endif  // CONFIG_H
