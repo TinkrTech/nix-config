@@ -23,9 +23,13 @@
 	let
 		lib = nixpkgs.lib;
 		pkgs = nixpkgs.legacyPackages."x86_64-linux";
+		hosts = [
+			"lopen"
+			"syl"
+		];
 	in
 	{
-		nixosConfigurations = nixpkgs.lib.genAttrs ["lopen" "syl"] (hostName: nixpkgs.lib.nixosSystem {
+		nixosConfigurations = nixpkgs.lib.genAttrs hosts (hostName: nixpkgs.lib.nixosSystem {
 			specialArgs = { inherit inputs; };
 			modules = [
 				{ networking.hostName = hostName; }
@@ -34,11 +38,12 @@
 				inputs.flatpak.nixosModules.nix-flatpak
 			];
 		});
-		homeConfigurations.jade = home-manager.lib.homeManagerConfiguration {
+		homeConfigurations = nixpkgs.lib.genAttrs hosts (hostName: home-manager.lib.homeManagerConfiguration {
 			inherit pkgs;
+			extraSpecialArgs = { inherit hostName; };
 			modules = [
-				./hosts/lopen/jade.nix
+				./hosts/${hostName}/home.nix
 			];
-		};
+		});
 	};
 }

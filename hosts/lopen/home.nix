@@ -1,9 +1,9 @@
 { config, pkgs, inputs, ... }:
 {
 	imports = [
-		./modules/home-manager/bash.nix
-		./modules/home-manager/dunst.nix
-		./modules/home-manager/git.nix
+		../../modules/home-manager/bash.nix
+		../../modules/home-manager/dunst.nix
+		../../modules/home-manager/git.nix
 	];
 	# Home Manager needs a bit of information about you and the paths it should
 	# manage.
