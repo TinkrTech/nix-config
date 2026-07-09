@@ -1,27 +1,10 @@
 { config, pkgs, inputs, ... }:
-let
-	aliases = {
-		# bat aliases
-		cat = "bat -p";
-		lsbc = "lsblk | bat -l=conf -p";
-		man = "batman";
-		
-		# screenfetch lmao
-		screenfetch = "fastfetch";
-
-		# NixOS Aliases
-		rebuild = "sudo nixos-rebuild switch --flake ~/nixos";
-		test-cfg = "sudo nixos-rebuild test --flake ~/nixos";
-		cleanup = "sudo nix-collect-garbage -d";
-		list-gen = "nixos-rebuild list-generations";
-		# Home-Manager Aliases
-		hm-rebuild = "home-manager switch --flake ~/nixos";
-		hm-list-gen = "home-manager generations";
-		# Flake Aliases
-		update = "nix flake update --flake ~/nixos; rebuild";
-	};
-in
 {
+	imports = [
+		./modules/home-manager/bash.nix
+		./modules/home-manager/dunst.nix
+		./modules/home-manager/git.nix
+	];
 	# Home Manager needs a bit of information about you and the paths it should
 	# manage.
 	home.username = "jade";
@@ -66,51 +49,8 @@ in
 		#	 org.gradle.console=verbose
 		#	 org.gradle.daemon.idletimeout=3600000
 		# '';
-	};
+	};	
 	
-	programs.bash = {
-		enable = true;
-		shellAliases = aliases;
-		historyControl = ["erasedups" "ignoreboth"];
-	};
-
-	programs.git = {
-		enable = true;
-		settings = {
-			user = {
-				name = "Jade";
-				email = "jade@tinkrtech.net";
-			};
-			init.defaultBranch = "main";
-			core.sshCommand = "ssh -i ~/.ssh/github";
-			alias = {
-				lg = "log --oneline";
-				lgbt = "lg --graph main..HEAD";
-				fixup = "commit --fixup HEAD";
-			};
-		};
-	};
-	
-	services.dunst = {
-		enable = true;
-		settings = {
-			global = {
-				font = "Droid Mono 14";
-				corner_radius = 15;
-			};
-			
-			urgency_normal = {
-				background = "#37474f";
-				foreground = "#eceff1";
-				timeout = 10;
-			};
-
-			urgency_critical = {
-				timeout = 30;
-			};
-		};
-	};
-
 	# Let Home Manager install and manage itself.
 	programs.home-manager.enable = true;
 }

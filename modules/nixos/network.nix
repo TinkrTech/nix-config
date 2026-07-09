@@ -1,7 +1,6 @@
 { config, pkgs, inputs, ... }:
 {
 	networking = {
-		hostName = "nixos-laptop";
 		networkmanager = {
 			enable = true;
 			plugins = [ pkgs.networkmanager-openvpn ];
