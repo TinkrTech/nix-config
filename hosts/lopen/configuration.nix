@@ -63,6 +63,7 @@
 		dunst
 		jq
 		ripgrep
+		tree
 	];
 
 	sops = {
