@@ -13,17 +13,21 @@
 			buildInputs = with pkgs; (oldAttrs.buildInputs or []) ++ [
 				libxcb
 			];
-			postPatch = "cp ${./dwm/dwm.h} config.def.h";
+			postPatch = "cp ${./dwm.h} config.def.h";
 		});
 		extraSessionCommands = "dwmblocks &";
 	};
 	
 	environment.systemPackages = with pkgs; [
-		(callPackage ./dwm/dwmblocks-async.drv {
-			config = ./dwm/dwmblocks.h;
+		(callPackage ./dwmblocks-async.drv {
+			config = ./dwmblocks.h;
 		})
-		betterlockscreen
+		betterlockscreen # Simple lock screen
 		dmenu
+		dunst # libnotify daemon
+		libnotify
+		kitty # terminal emulator
+		qutebrowser # Keyboard-based web browser
 	];
 	
 	security.pam.services.i3lock.enable = true;
@@ -46,5 +50,4 @@
 		HandleLidSwitchExternalPower = "suspend";
 		HandleLidSwitchDocked = "ignore";
 	};
-
 }

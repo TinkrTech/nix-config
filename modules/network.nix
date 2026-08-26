@@ -1,5 +1,19 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, ... }:
 {
+	imports = [
+		./sops.nix
+	];
+	
+	sops = {
+		secrets = {
+			"pia/username" = {};
+			"pia/password" = {};
+			"pia/ontario-so-crl" = {};
+			"pia/ontario-so-ca" = {};
+			"homevpn-conf" = {};
+		};
+	};
+
 	networking = {
 		networkmanager = {
 			enable = true;
