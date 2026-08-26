@@ -25,7 +25,7 @@
 		pkgs = nixpkgs.legacyPackages."x86_64-linux";
 		hosts = [
 			"lopen"
-			"syl"
+			"teft"
 		];
 	in
 	{

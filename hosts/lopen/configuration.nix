@@ -73,7 +73,7 @@
 		secrets = {
 			"pia/username" = {};
 			"pia/password" = {};
-		"pia/ontario-so-crl" = {};
+			"pia/ontario-so-crl" = {};
 			"pia/ontario-so-ca" = {};
 			"homevpn-conf" = {};
 		};
