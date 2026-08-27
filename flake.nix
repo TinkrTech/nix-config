@@ -36,6 +36,16 @@
 				./hosts/${hostName}/configuration.nix
 				inputs.sops.nixosModules.sops
 				inputs.flatpak.nixosModules.nix-flatpak
+				home-manager.nixosModules.home-manager
+				{
+					home-manager.useGlobalPkgs = true;
+					home-manager.useUserPackages = true;
+					home-manager.extraSpecialArgs = { 
+						inherit inputs; 
+						inherit hostName; 
+					};
+					home-manager.users.jade = ./hosts/${hostName}/home.nix;
+				}
 			];
 		});
 		homeConfigurations = nixpkgs.lib.genAttrs hosts (hostName: home-manager.lib.homeManagerConfiguration {
