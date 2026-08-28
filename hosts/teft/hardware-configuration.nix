@@ -57,7 +57,15 @@
 		sync.enable = true;
 		intelBusId = "PCI:0:2:0";
 		nvidiaBusId = "PCI:1:0:0";
-	}
+	};
+  };
+  nixpkgs.config = {
+    allowUnfree = true;
+	nvidia.acceptLicense = true;
+	problems.handlers = {
+      nvidia-x11.broken = "warn"; # or "ignore"
+	  nvidia-kernel-modules.broken = "warn";
+    };
   };
   hardware.graphics.extraPackages = with pkgs; [
     intel-vaapi-driver
