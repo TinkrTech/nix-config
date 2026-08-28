@@ -50,7 +50,7 @@
     modesetting.enable = true;
 	open = false;
 	nvidiaSettings = true;
-	package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
+	package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
 
 	# laptop dual gpu support
 	prime = {
