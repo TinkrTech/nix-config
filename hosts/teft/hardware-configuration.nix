@@ -43,7 +43,22 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   
-  services.xserver.videoDrivers = ["modesetting"];
+  hardware.graphics.enable = true;
+  
+  services.xserver.videoDrivers = [ "nvidia" ]; # "modesetting"];
+  hardware.nvidia = {
+    modesetting.enable = true;
+	open = false;
+	nvidiaSettings = true;
+	package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
+
+	# laptop dual gpu support
+	prime = {
+		sync.enable = true;
+		intelBusId = "PCI:0:2:0";
+		nvidiaBusId = "PCI:1:0:0";
+	}
+  };
   hardware.graphics.extraPackages = with pkgs; [
     intel-vaapi-driver
 	libvdpau-va-gl
