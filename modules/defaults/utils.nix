@@ -11,6 +11,7 @@
 		jq
 		pinentry-curses
 		ripgrep
+		xclip
 		tree
 	];
 	
