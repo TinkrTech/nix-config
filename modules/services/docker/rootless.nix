@@ -8,11 +8,8 @@
 		};
 	};
 	
-	users.users.docker = {
-		isNormalUser = true;
+	users.users."${config.service-user}" = {
 		extraGroups = [ "docker" ];
-		linger = true; # Keep user services running even if user is logged out
-		autoSubUidGidRange = true;
 	};
 	
 	# Enable the systemd service for docker for this user on boot
