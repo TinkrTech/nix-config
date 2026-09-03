@@ -2,6 +2,6 @@
 {
 	imports = [
 		./caddy.nix
-		./user.nix
+		./users.nix
 	];
 }

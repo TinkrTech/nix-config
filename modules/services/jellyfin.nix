@@ -17,8 +17,8 @@ in
 		# TODO: Figure out port overrides
 		user = config.service-user;
 		group = config.service-group;
-		cacheDir = /mnt/vdev1/configs/jellyfin/cache;
-		configDir = /mnt/vdev1/configs/jellyfin/config;
+		cacheDir = "/mnt/vdev1/configs/jellyfin/cache";
+		configDir = "/mnt/vdev1/configs/jellyfin/config";
 	};
 
 	services.caddy.virtualHosts."${url}".extraConfig = ''

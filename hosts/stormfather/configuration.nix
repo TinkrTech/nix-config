@@ -2,49 +2,25 @@
 {
 	imports = [ 
 		./hardware-configuration.nix
+		./shares.nix
+		./storage.nix
 		../../modules/defaults/boot.nix
 		../../modules/defaults/locale.nix
 		../../modules/defaults/nixvim.nix
 		../../modules/defaults/utils.nix
 		../../modules/ssh.nix
-		../../modules/sops.nix
+	
+		# TODO: Make services toggleable with the modules/services import
+		../../modules/services/default.nix
+		../../modules/services/immich.nix
+		../../modules/services/jellyfin.nix
+		../../modules/services/pihole.nix
+		../../modules/services/vaultwarden.nix
+		../../modules/services/wireguard.nix
 	];
-
+	
 	# Disbale printing service from utils.nix
-	services.printing.enable = false;
-	services.openssh.settings.AllowUsers = [ "admin" "vanasa" ];
-
-	sops.secrets = {
-		"admin/passwordHash".neededForUsers = true
-		"vanasa/passwordHash".neededForUsers = true;
-	};
-
-	users.users.admin = {
-		isNormalUser = true;
-		description = "Admin";
-		extraGroups = [ "docker" "networkmanager" "wheel" ];
-		packages = with pkgs; [
-		];
-
-		openssh.authorizedKeys = [
-			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH+G3FP97UOUc2SpMHtXOX0+8RwVsT99OntbS7gdzMBv jade@Ryzen-Desktop" # Mint-Desktop
-			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGk8iiJUsUpaxWnJc0PRIneTrt0Oz8fHgR2+5wDuwURf jade@lopen"
-		];
-
-		hashedPassword = config.sops.secrets."admin/passwordHash".path;
-	};
-	
-	users.users.vanasa = {
-		isNormalUser = true;
-		description = "vanasa";
-		
-		openssh.authorizedKeys = [
-			# Mint-Desktop
-			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFtiSdfFJ3zCLbrnsaMt81YSH9cKWEpPxm+pSSDn9eOY jade@lopen"
-		];
-		hashedPassword = config.sops.secrets."vanasa/passwordHash".path;
-	};
-	
+	services.printing.enable = false;	
 	
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget

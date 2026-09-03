@@ -11,7 +11,7 @@ in
 		group = config.service-group;
 		host = ip;
 		port = port;
-		mediaLocation = /mnt/vdev1/Photos;
+		mediaLocation = "/mnt/vdev1/Photos";
 	};
 
 	services.caddy.virtualHosts."${url}".extraConfig = ''
