@@ -1,4 +1,7 @@
 { config, lib, pkgs, ...}:
+let
+	cfg = config.hosted-services;
+in
 {
 	virtualisation.docker = {
 		enable = true;
@@ -8,7 +11,7 @@
 		};
 	};
 	
-	users.users."${config.service-user}" = {
+	users.users."${cfg.service-user}" = {
 		extraGroups = [ "docker" ];
 	};
 	

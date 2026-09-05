@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 let
-	port = 37073;
 	interface = "wg0"
 	ipv4-prefix = "10.8.0";
 	ipv6-prefix = "fdcc:ad94:bacf:61a4::cafe";
@@ -24,46 +23,52 @@ let
 	firewallRules = mode: lib.strings.join "\n" [ "${_firewallRules mode false}" "${_firewallRules mode true}";
 in
 {
-	sops.secrets = {
-		"wg/private-key" = {};
-		"wg/jade-pixel-8-preshared" = {};
-		"wg/ari-s24-preshared" = {};
-		"wg/lopen-preshared" = {};
+	option.hosted-services.wireguard = (import ./_options.nix) // {
+		enable = lib.mkEnableOption = "wireguard";	
 	};
 
-	networking.wg-quick.interfaces = {
-		"${interface}" = {
-			address = [
-				"${ipv4-prefix}.1/24"
-				"${ipv6-prefix}:1/112"
-			];
-			privateKeyFile = sops.secrets."wg/private-key".path;
-			listenPort = port;
-			mtu = 1420;
-			table = "main";
-
-			# Enable Peer to route traffic to the internet
-			postUp = firewallRules "-A";
-			# Undo the above
-			postDown = firewallRules "-D";
-
-			peers = [
-				{ # jade-pixel-8	
-					publicKey = "FNu2f4hbGz/X2V3zlcAVQBqYNjjKcw2Y00xjV4NLgAA=";
-					presharedKeyFile = sops.secrets."wg/jade-pixel-8-preshared".path;
-					allowedIPs = peerIpsFor 3;
-				}
-				{ # lopen 
-					publicKey = "2ZTuNT1Tc2A6/SM8yE05fSm8lVmqWI9H8uCjOlK3Hzo=";
-					presharedKeyFile = sops.secrets."wg/lopen-preshared".path;
-					allowedIPs = peerIpsFor 4;
-				}
-				{ # ari-s24
-					publicKey = "JikOE8igB22pjGByfOpLssWOP74WGeudB228SXyY9Uk=";
-					presharedKeyFile = sops.secrets."wg/ari-s24-preshared".path;
-					allowedIPs = peerIpsFor 5;
-				}
-			];
+	config = lib.mkIf cfg.wireguard.enable = {
+		sops.secrets = {
+			"wg/private-key" = {};
+			"wg/jade-pixel-8-preshared" = {};
+			"wg/ari-s24-preshared" = {};
+			"wg/lopen-preshared" = {};
+		};
+	
+		networking.wg-quick.interfaces = {
+			"${interface}" = {
+				address = [
+					"${ipv4-prefix}.1/24"
+					"${ipv6-prefix}:1/112"
+				];
+				privateKeyFile = sops.secrets."wg/private-key".path;
+				listenPort = cfg.wireguard.port;
+				mtu = 1420;
+				table = "main";
+	
+				# Enable Peer to route traffic to the internet
+				postUp = firewallRules "-A";
+				# Undo the above
+				postDown = firewallRules "-D";
+	
+				peers = [
+					{ # jade-pixel-8	
+						publicKey = "FNu2f4hbGz/X2V3zlcAVQBqYNjjKcw2Y00xjV4NLgAA=";
+						presharedKeyFile = sops.secrets."wg/jade-pixel-8-preshared".path;
+						allowedIPs = peerIpsFor 3;
+					}
+					{ # lopen 
+						publicKey = "2ZTuNT1Tc2A6/SM8yE05fSm8lVmqWI9H8uCjOlK3Hzo=";
+						presharedKeyFile = sops.secrets."wg/lopen-preshared".path;
+						allowedIPs = peerIpsFor 4;
+					}
+					{ # ari-s24
+						publicKey = "JikOE8igB22pjGByfOpLssWOP74WGeudB228SXyY9Uk=";
+						presharedKeyFile = sops.secrets."wg/ari-s24-preshared".path;
+						allowedIPs = peerIpsFor 5;
+					}
+				];
+			};
 		};
 	};
 }

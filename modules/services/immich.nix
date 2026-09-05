@@ -1,20 +1,28 @@
 { config, pkgs, ... }:
 let
-	url = "photos.tinkrtech.net";
-	ip = "10.0.0.99";
-	port = 8098;
+	cfg = config.hosted-services;
+	url = "${cfg.immich.subdomain}.${cfg.domain}";
 in
 {
-	services.immich = {
-		enable = true;
-		user = config.service-user;
-		group = config.service-group;
-		host = ip;
-		port = port;
-		mediaLocation = "/mnt/vdev1/Photos";
+	options.hosted-services.immich = (import ./_options.nix) // {
+		enable = lib.mkEnableOption "immich";
+		media-dir = lib.mkOption = {
+			type = lib.types.path;
+		};
 	};
 
-	services.caddy.virtualHosts."${url}".extraConfig = ''
-		reverse_proxy ${ip}:${toString port}
-	'';
+	config = lib.mkIf cfg.immich.enable {
+		services.immich = {
+			enable = true;
+			user = cfg.service-user;
+			group = cfg.service-group;
+			host = cfg.ip;
+			port = cfg.immich.port;
+			mediaLocation = cfg.immich.media-dir;
+		};
+	
+		services.caddy.virtualHosts."${url}".extraConfig = ''
+			reverse_proxy ${cfg.ip}:${toString cfg.immich.port}
+		'';
+	};
 }

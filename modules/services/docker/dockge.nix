@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 let
-	service_user = config.service-user;
-	service_group = config.service-group;
+	service_user = config.hosted-services.service-user;
+	service_group = config.hosted-services.service-group;
 	service_uid = toString config.users.users."${service_user}".uid;
 	volumes = {
 		data = "/var/lib/dockge";

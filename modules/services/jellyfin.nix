@@ -1,27 +1,38 @@
 { config, pkgs, ... }:
 let
-	url = "jellyfin.tinkrtech.net";
-	ip = "10.0.0.99";
-	port = 8096;
+	cfg = config.hosted-services;
+	url = "${cfg.jellyfin.subdomain}.${cfg.domain}";
 in
 {
-	environment.systemPackages = with pkgs; [
-		jellyfin
-		jellyfin-web
-		jellyfin-ffmpeg
-	];
-
-	services.jellyfin = {
-		enable = true;
-		openFirewall = true;
-		# TODO: Figure out port overrides
-		user = config.service-user;
-		group = config.service-group;
-		cacheDir = "/mnt/vdev1/configs/jellyfin/cache";
-		configDir = "/mnt/vdev1/configs/jellyfin/config";
+	options.hosted-services.jellyfin = (import ./_options.nix) // {
+		enable = lib.mkEnableOption "jellyfin";
+		cache-dir = lib.mkOption {
+			type = lib.types.path;
+		};
+		config-dir = lib.mkOption {
+			type = lib.types.path;
+		};
 	};
 
-	services.caddy.virtualHosts."${url}".extraConfig = ''
-		reverse_proxy ${ip}:${toString port}
-	'';
+	config = lib.mkIf cfg.jellyfin.enable {
+		environment.systemPackages = with pkgs; [
+			jellyfin
+			jellyfin-web
+			jellyfin-ffmpeg
+		];
+
+		services.jellyfin = {
+			enable = true;
+			openFirewall = true;
+			# TODO: Figure out port overrides
+			user = cfg.service-user;
+			group = cfg.service-group;
+			cacheDir = cfg.jellyfin.cache-dir;
+			configDir = cfg.jellyfin.config-dir;
+		};
+
+		services.caddy.virtualHosts."${url}".extraConfig = ''
+			reverse_proxy ${cfg.ip}:${toString cfg.jellyfin.port}
+		'';
+	};
 }

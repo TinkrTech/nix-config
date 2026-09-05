@@ -2,21 +2,16 @@
 {
 	imports = [ 
 		./hardware-configuration.nix
+		./services.nix
 		./shares.nix
 		./storage.nix
+		./users.nix
+		
 		../../modules/defaults/boot.nix
 		../../modules/defaults/locale.nix
 		../../modules/defaults/nixvim.nix
 		../../modules/defaults/utils.nix
 		../../modules/ssh.nix
-	
-		# TODO: Make services toggleable with the modules/services import
-		../../modules/services/default.nix
-		../../modules/services/immich.nix
-		../../modules/services/jellyfin.nix
-		../../modules/services/pihole.nix
-		../../modules/services/vaultwarden.nix
-		../../modules/services/wireguard.nix
 	];
 	
 	# Disbale printing service from utils.nix
