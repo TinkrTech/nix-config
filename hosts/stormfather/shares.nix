@@ -4,9 +4,9 @@ let
 		uid = config.users.users.vanasa.uid;
 		gid = config.users.users.vanasa.gid;
 	};
-	service = {
-		uid = config.users.users."${config.service-user}".uid;
-		gid = config.users.groups.shared.gid;
+	jellyfin = {
+		uid = config.users.users.jellyfin.uid;
+		gid = config.users.groups.jellyfin.gid;
 	};
 {
 	services.nfs = {
@@ -24,7 +24,7 @@ let
 		#  - anonuid - the user to map to based on the above rules
 		#  - anongid - the user to map to based on the above rules
 		exports = ''
-			/mnt/vdev1/Media 10.0.0.99/32(rw,sync,no_subtree_check,all_squash,anonuid=${service.uid},anongid=${service.gid})
+			/mnt/vdev1/Media 10.0.0.99/32(rw,sync,no_subtree_check,all_squash,anonuid=${jellyfin.uid},anongid=${jellyfin.gid})
 			/mnt/vdev1/Shared 10.0.0.99/32(rw,sync,no_subtree_check,all_squash,anonuid=${vanasa.uid},anongid=${vanasa.gid})
 		'';
 	};

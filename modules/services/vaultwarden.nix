@@ -1,10 +1,10 @@
-{ config, pkgs, ...}:
+{ config, lib, pkgs, inputs, ...}:
 let
 	cfg = config.hosted-services;
 	url = "${cfg.vaultwarden.subdomain}.${cfg.domain}";
 in
 {
-	options.hosted-services.vaultwarden = (import ./_options.nix) // {
+	options.hosted-services.vaultwarden = (import ./_options.nix { inherit lib; }) // {
 		enable = lib.mkEnableOption "vaultwarden";
 	};
 
@@ -15,22 +15,19 @@ in
 
 		services.vaultwarden = {
 			enable = true;
-			user = config.service-user;
-			group = config.service-group;
-			
 			package = pkgs.vaultwarden-postgresql;
 			
 			configurePostgres = true;
 			domain = url;
 
 			# TODO: create ADMIN_TOKEN and SMTP_PASSWORD env file
-			environmentFile = sops.secrets."vaultwarden/env-file".path;
+			environmentFile = config.sops.secrets."vaultwarden/env-file".path;
 
 			config = {
 				SIGNUPS_ALLOWED = true;
 
-				ROCKET_ADDRESS = ip;
-				ROCKET_PORT = port;
+				ROCKET_ADDRESS = cfg.ip;
+				ROCKET_PORT = cfg.vaultwarden.port;
 				ROCKET_LOG = "critical";
 
 				SMTP_HOST = "smtp.protonmail.ch";
