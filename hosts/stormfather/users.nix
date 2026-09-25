@@ -16,8 +16,8 @@
 	users.users.admin = {
 		isNormalUser = true;
 		description = "Admin";
-		uid = 950; # keep same uid as truenas_admin
-		gid = 950; # keep same gid as truenas_admin
+		uid = 1000;
+		gid = 1000;
 		extraGroups = [ "docker" "networkmanager" "wheel" ];
 		packages = with pkgs; [
 		];

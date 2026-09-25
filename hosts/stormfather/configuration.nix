@@ -14,7 +14,7 @@
 		../../modules/ssh.nix
 	];
 	
-	# Disbale printing service from utils.nix
+	# Disable printing service from utils.nix
 	services.printing.enable = false;	
 	
 	# List packages installed in system profile. To search, run:
