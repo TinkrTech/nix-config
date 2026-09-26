@@ -2,11 +2,14 @@
 {
 	boot.supportedFilesystems = [ "zfs" ];
 	boot.zfs.extraPools = [ "vdev1" ];
+	boot.zfs.forceImportRoot = false; # todo: remove in 26.11
 	fileSystems."/mnt/vdev1" = {
 		device = "vdev1";
 		fsType = "zfs";
 	};
-	
+	# Needs to be unique for network disks.
+	# This is fine though since the disk is local
+	networking.hostId = "deadbeef";
 	services.zfs = {
 		autoScrub = {
 			enable = true;
@@ -14,7 +17,7 @@
 			# See https://wiki.archlinux.org/title/Systemd/Timers#Realtime_timer
 			interval = "weekly";
 		};
-		autoTrim.enable = true;
+		trim.enable = true;
 		# TODO: snapshots for
 		# - vdev1/configs every week and keep for 1 month
 		# - vdev1/Photos every day and keep for 1 week

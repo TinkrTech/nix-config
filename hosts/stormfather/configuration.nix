@@ -1,9 +1,10 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 {
 	imports = [ 
 		./hardware-configuration.nix
+		./graphics.nix
 		./services.nix
-		./shares.nix
+#		./shares.nix
 		./storage.nix
 		./users.nix
 		
@@ -15,7 +16,7 @@
 	];
 	
 	# Disable printing service from utils.nix
-	services.printing.enable = false;	
+	services.printing.enable = lib.mkForce false;	
 	
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget

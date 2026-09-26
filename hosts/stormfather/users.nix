@@ -1,15 +1,24 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
 	imports = [
-		../../modules/services/users.nix
 		../../modules/sops.nix
 	];
+	
+	sops.age.keyFile = lib.mkForce "/home/admin/.config/sops/age/keys.txt";
 
 	services.openssh.settings.AllowUsers = [ "admin" "vanasa" ];
 
 	sops.secrets = {
-		"admin/passwordHash".neededForUsers = true
+		"admin/passwordHash".neededForUsers = true;
 		"vanasa/passwordHash".neededForUsers = true;
+	};
+	
+	users.groups.admin = {
+		gid = 1000;
+	};
+	
+	users.groups.vanasa = {
+		gid = 3000;
 	};
 
 	# High-privilege user for system admin
@@ -17,17 +26,17 @@
 		isNormalUser = true;
 		description = "Admin";
 		uid = 1000;
-		gid = 1000;
-		extraGroups = [ "docker" "networkmanager" "wheel" ];
+		group = "admin";
+		extraGroups = [ "vanasa" "jellyfin" "docker" "networkmanager" "wheel" ];
 		packages = with pkgs; [
 		];
 
-		openssh.authorizedKeys = [
+		openssh.authorizedKeys.keys = [
 			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH+G3FP97UOUc2SpMHtXOX0+8RwVsT99OntbS7gdzMBv jade@Ryzen-Desktop" # Mint-Desktop
 			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGk8iiJUsUpaxWnJc0PRIneTrt0Oz8fHgR2+5wDuwURf jade@lopen"
 		];
 
-		hashedPassword = config.sops.secrets."admin/passwordHash".path;
+		hashedPasswordFile = config.sops.secrets."admin/passwordHash".path;
 	};
 
 	# Low-privilege user for shares
@@ -35,12 +44,10 @@
 		isNormalUser = true;
 		description = "vanasa";
 		uid = 3000; # keep same uid as vanasa on truenas
-		gid = 3000; # keep same gid as vanasa on truenas
-		extraGroups = [ "shared" ];
-		openssh.authorizedKeys = [
-			# Mint-Desktop
+		group = "vanasa";
+		openssh.authorizedKeys.keys = [
 			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFtiSdfFJ3zCLbrnsaMt81YSH9cKWEpPxm+pSSDn9eOY jade@lopen"
 		];
-		hashedPassword = config.sops.secrets."vanasa/passwordHash".path;
+		hashedPasswordFile = config.sops.secrets."vanasa/passwordHash".path;
 	};
 }

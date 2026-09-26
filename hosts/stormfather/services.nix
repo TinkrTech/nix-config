@@ -7,24 +7,24 @@
 	hosted-services = {
 		domain = "tinkrtech.net";
 		immich = {
-			enable = true;
+			enable = false;
 			subdomain = "photos";
 			port = 8098;
 			media-dir = "/mnt/vdev1/Photos";
 		};
 
 		jellyfin = {
-			enable = true;
+			enable = false;
 			subdomain = "jellyfin";
 			port = 8096;
 			cache-dir = "/mnt/vdev1/configs/jellyfin/cache";
 			config-dir = "/mnt/vdev1/configs/jellyfin/config"; 
 		};
 
-		pihole.enable = true;
+		pihole.enable = false;
 		
 		vaultwarden = {
-			enable = true;
+			enable = false;
 			subdomain = "vault";
 			port = 8104;
 		};
