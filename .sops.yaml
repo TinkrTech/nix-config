@@ -1,0 +1,9 @@
+keys:
+  - &lopen age1ffmlmh7h3kay6zk8x3hccdk9g4k5c9a6sjhn0az8nlln740cmemq7ujyy7
+  - &stormfather age1v0w9ketwlplkptpu3hrxcf86sg3say7r8suuk9822gcvu783jglswkfu92 
+creation_rules:
+  - path_regex: secrets.yaml$
+    key_groups:
+      - age:
+        - *lopen
+        - *stormfather
