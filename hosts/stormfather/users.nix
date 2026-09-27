@@ -4,8 +4,6 @@
 		../../modules/sops.nix
 	];
 	
-	sops.age.keyFile = lib.mkForce "/home/admin/.config/sops/age/keys.txt";
-
 	services.openssh.settings.AllowUsers = [ "admin" "vanasa" ];
 
 	sops.secrets = {

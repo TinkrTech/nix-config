@@ -8,7 +8,7 @@
 		../../modules/network.nix
 		../../modules/no-tpm.nix
 	];
-	
+	sops.age.keyFile = "/home/jade/.config/sops/age/keys.txt";
 	users.users.jade.packages = with pkgs; [
 		termusic
 		playerctl

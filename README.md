@@ -8,6 +8,31 @@ This repo contains the configuration files for all NixOS machines.
 
 1. NixOS installation media (Guide available on [nixos.org](https://nixos.org/download))
 2. Choose a hostname - Following the theme, it should be a character in The Stormlight Archives
+    - Hint: the commands can be copied here if you set the `HOST` environment variable
+3. Create a new sops key on an existing host (e.g. lopen)
+    1. Generate a new age private/public key pair
+        ```sh
+        nix shell nixpkgs#age -c age-keygen -o ~/keys.txt
+        sed '/^#/d' ~/.config/sops/age/key
+        nix shell nixpkgs#age -c age-keygen -y ~/keys.txt | xclip
+        ```
+    2. Copy the **public key** to .sops.yaml file as follows:
+        ```yaml
+        keys:
+          # ...
+          - &host age...
+        creation_rules:
+          - path_regex: secrets.yaml$
+            key_groups:
+              - age:
+                # ...
+                - *host
+        ```
+    3. Run
+        ```sh
+        sops updatekeys secrets.yaml
+        ```
+    4. Push the updates to git
 
 ## Installation
 
@@ -18,48 +43,52 @@ This repo contains the configuration files for all NixOS machines.
     lsblk
     sudo mount <root partition> /mnt
     sudo mkdir -p /mnt/boot
-    sudo mount <boot partition> /mnt/boot
+    sudo mount <boot partition> /mnt/boot -o umask=0077
     sudo swapon <swap partition> # if applicable
     ```
-4. Create a GitHub SSH Key
-    1. Run 
-        ```sh
-        mkdir -p /mnt/home/jade/.ssh
-        ssh-keygen -f /mnt/home/jade/.ssh/github -N ""
-        ```
-    2. Copy the contents of `/mnt/home/jade/.ssh/github.pub` to your clipboard
-    3. Navigate to [Github SSH Keys](https://github.com/settings/keys/ssh/new)
-    4. Set the title to the machine, keep the key type as "Authentication Key", and paste your public key into the key section
-5. Clone this Repo
-    1. Create the directory
-        ```sh
-        sudo mkdir -p /mnt/home/jade/nixos
-        cd /mnt/home/jade/nixos
-        ``` 
-    2. Run
-        ```sh
-        git clone git@github.com/TinkrTech/nix-config .
-        ```
+4. Clone this Repo 
+    ```sh
+    git clone https://github.com/TinkrTech/nix-config.git ~/nixos
+    ```
+5. Move the `keys.txt` file from the prerequisites to a USB drive and copy it to `/home/USER/.config/sops/age/keys.txt`
 6. Generate the hardware configuration
     ```sh
-    mkdir -p hosts/HOSTNAME # Replace HOSTNAME with the chosen hostname
-    sudo nixos-generate-config --root /mnt --dir /mnt/home/jade/nixos/hosts/HOSTNAME
-    
+    cd ~/nixos
+    mkdir -p hosts/"$HOST" 
+    sudo nixos-generate-config --root /mnt --dir ~/nixos/hosts/HOSTNAME
     ```
-7. Copy the template folder, replacing HOSTNAME with the new host's name 
+7. Create the new machine's initial configuration
+    1. Copy the template folder, replacing HOSTNAME with the new host's name 
+        ```sh
+        cp hosts/template hosts/HOSTNAME
+        ```
+    2. Modify `hosts/HOSTNAME/configuration.nix` and `hosts/HOSTNAME/home-<user>.nix` to have the machine configuration you want. 
+        - Hint: Use `nix-shell -p vim` to temporarily install vim :D
+8. Install nixos
     ```sh
-    cp hosts/template hosts/HOSTNAME # replace HOSTNAME with the new hosts name
+    sudo nixos-install --flake .#"$HOST"
     ```
-8. Modify `hosts/HOSTNAME/configuration.nix` and `hosts/HOSTNAME/home.nix` to have the machine configuration you want. 
-    - Hint: Use `nix-shell -p vim` to temporarily install vim :D
-    - Note: `modules/nixos/network.nix` requires copying the `/home/jade/.config/sops/age/private-keys-only.txt` file from an existing machine
-9. Add the hostname to the hosts variable in `flake.nix`
-10. Install nixos
+9. Copy the modified configuration to the user's home directory
     ```sh
-    sudo nixos-install --flake .
+    sudo cp ~/.ssh /mnt/home/USER/.ssh
+    sudo cp ~/.config/sops /mnt/home/USER/.config/sops/age/keys.txt
+    sudo cp ~/nixos /mnt/home/USER/nixos
     ```
-11. Once the command exits correctly, reboot
+10. Once the command exits correctly, reboot
     ```sh
     sudo reboot
     ```
-
+11. Once rebooted, create a GitHub ssh key
+    1. Run
+        ```sh
+        ssh-keygen -f ~/.ssh/github -N ""
+        ```
+    2. Copy the contents of ~/.ssh/github.pub to your clipboard
+    3. Navigate to [Github SSH Keys](https://github.com/settings/keys/ssh/new)
+    4. Set the title to the hostname of the machine, keep the type as "Authentication Key", and paste your public key into the "key" section.
+12. Push the changes to remote
+    - Note: You may need to fix the permissions of the folder
+    ```sh
+    cd nixos
+    git push
+    ```

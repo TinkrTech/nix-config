@@ -6,7 +6,8 @@
 		../../modules/desktop-envs/cinnamon.nix
 		../../modules/nas-nfs.nix
 	];
-	
+	sops.age.keyFile = "/home/jade/.config/sops/age/keys.txt";
+
 	users.users.jade.packages = with pkgs; [
 	];
 

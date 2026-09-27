@@ -14,7 +14,7 @@
 		../../modules/defaults/utils.nix
 		../../modules/ssh.nix
 	];
-	
+	sops.age.keyFile = "/home/admin/.config/sops/age/keys.txt";	
 	# Disable printing service from utils.nix
 	services.printing.enable = lib.mkForce false;	
 	
