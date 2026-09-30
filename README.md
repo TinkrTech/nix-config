@@ -49,21 +49,21 @@ This repo contains the configuration files for all NixOS machines.
 4. Clone this Repo 
     ```sh
     git clone https://github.com/TinkrTech/nix-config.git ~/nixos
+    cd nixos
     ```
 5. Move the `keys.txt` file from the prerequisites to a USB drive and copy it to `/home/USER/.config/sops/age/keys.txt`
-6. Generate the hardware configuration
-    ```sh
-    cd ~/nixos
-    mkdir -p hosts/"$HOST" 
-    sudo nixos-generate-config --root /mnt --dir ~/nixos/hosts/HOSTNAME
-    ```
-7. Create the new machine's initial configuration
+6. Create the new machine's initial configuration
     1. Copy the template folder, replacing HOSTNAME with the new host's name 
         ```sh
+        mkdir -p hosts/"$HOST" 
         cp hosts/template hosts/HOSTNAME
         ```
     2. Modify `hosts/HOSTNAME/configuration.nix` and `hosts/HOSTNAME/home-<user>.nix` to have the machine configuration you want. 
         - Hint: Use `nix-shell -p vim` to temporarily install vim :D
+7. Generate the hardware configuration
+    ```sh
+    sudo nixos-generate-config --root /mnt --dir ~/nixos/hosts/HOSTNAME
+    ```
 8. Install nixos
     ```sh
     sudo nixos-install --flake .#"$HOST"

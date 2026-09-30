@@ -2,7 +2,7 @@
 {
 	imports = [ 
 		./hardware-configuration.nix
-		./graphics.nix
+#		./graphics.nix
 		./services.nix
 #		./shares.nix
 		./storage.nix

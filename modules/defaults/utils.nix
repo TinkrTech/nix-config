@@ -5,6 +5,7 @@
 		bat-extras.batdiff
 		bat-extras.batman
 		bat-extras.prettybat
+		dig
 		fastfetch
 		git
 		htop
