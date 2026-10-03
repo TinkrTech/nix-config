@@ -51,7 +51,7 @@ This repo contains the configuration files for all NixOS machines.
     git clone https://github.com/TinkrTech/nix-config.git ~/nixos
     cd nixos
     ```
-5. Move the `keys.txt` file from the prerequisites to a USB drive and copy it to `/home/USER/.config/sops/age/keys.txt`
+5. Move the `keys.txt` file from the prerequisites to a USB drive and copy it to `~/.config/sops/age/keys.txt`
 6. Create the new machine's initial configuration
     1. Copy the template folder, replacing HOSTNAME with the new host's name 
         ```sh
@@ -63,6 +63,7 @@ This repo contains the configuration files for all NixOS machines.
 7. Generate the hardware configuration
     ```sh
     sudo nixos-generate-config --root /mnt --dir ~/nixos/hosts/HOSTNAME
+    git add .
     ```
 8. Install nixos
     ```sh
@@ -70,13 +71,13 @@ This repo contains the configuration files for all NixOS machines.
     ```
 9. Copy the modified configuration to the user's home directory
     ```sh
-    sudo cp ~/.ssh /mnt/home/USER/.ssh
-    sudo cp ~/.config/sops /mnt/home/USER/.config/sops/age/keys.txt
-    sudo cp ~/nixos /mnt/home/USER/nixos
+    sudo mkdir -p /mnt/home/USER/.config/
+    sudo cp -r ~/.config/sops /mnt/home/USER/.config/sops
+    sudo cp -r ~/nixos /mnt/home/USER/nixos
     ```
 10. Once the command exits correctly, reboot
     ```sh
-    sudo reboot
+    reboot
     ```
 11. Once rebooted, create a GitHub ssh key
     1. Run
