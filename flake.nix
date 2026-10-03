@@ -14,12 +14,16 @@
 			url = "github:Mic92/sops-nix";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+		deploy-rs = {
+			url = "github:serokell/deploy-rs";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 		flatpak = {
 			url = "github:gmodena/nix-flatpak";
 		};
 	};
 	
-	outputs = { self, nixpkgs, home-manager, ... } @ inputs: 
+	outputs = { self, nixpkgs, home-manager, deploy-rs, ... } @ inputs: 
 	let
 		lib = nixpkgs.lib;
 		pkgs = nixpkgs.legacyPackages."x86_64-linux";
@@ -59,6 +63,7 @@
 	{
 		nixosConfigurations = nixpkgs.lib.genAttrs hosts (hostName: nixpkgs.lib.nixosSystem {
 			specialArgs = { inherit inputs; };
+			system = "x86_64-linux";
 			modules = [
 				{ networking.hostName = hostName; }
 				./hosts/${hostName}/configuration.nix
@@ -76,12 +81,19 @@
 				}
 			];
 		});
-		homeConfigurations = nixpkgs.lib.genAttrs hosts (hostName: home-manager.lib.homeManagerConfiguration {
-			inherit pkgs;
-			extraSpecialArgs = { inherit hostName; };
-			modules = [
-				./hosts/${hostName}/home.nix
-			];
-		});
+
+		deploy.nodes = 
+		let
+			activate = host: deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."${host}";
+		in
+		{
+			stormfather = {
+				hostname = "stormfather";
+				sshUser = "admin";
+				user = "root";
+				profiles.system.path = activate "stormfather";	
+			};
+			checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+		};
 	};
 }

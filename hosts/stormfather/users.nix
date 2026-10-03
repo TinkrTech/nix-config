@@ -4,6 +4,9 @@
 		../../modules/sops.nix
 	];
 	
+	nix.settings.trusted-users = [ "root" "admin" ];
+	security.sudo.wheelNeedsPassword = false;
+	
 	services.openssh.settings.AllowUsers = [ "admin" "vanasa" ];
 
 	sops.secrets = {
@@ -36,7 +39,7 @@
 
 		hashedPasswordFile = config.sops.secrets."admin/passwordHash".path;
 	};
-
+	
 	# Low-privilege user for shares
 	users.users.vanasa = {
 		isNormalUser = true;

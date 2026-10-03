@@ -1,13 +1,10 @@
 { config, pkgs, ...}:
 {
 	boot.supportedFilesystems = [ "zfs" ];
+
 	boot.zfs.extraPools = [ "vdev1" ];
 	boot.zfs.forceImportRoot = false; # todo: remove in 26.11
-	fileSystems."/mnt/vdev1" = {
-		device = "vdev1";
-		fsType = "zfs";
-		options = [ "nofail" "zfsutil" ];
-	};
+	
 	# Needs to be unique for network disks.
 	# This is fine though since the disk is local
 	networking.hostId = "deadbeef";
