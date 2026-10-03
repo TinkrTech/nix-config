@@ -21,7 +21,7 @@
 			config-dir = "/mnt/vdev1/configs/jellyfin/config"; 
 		};
 
-		pihole.enable = false;
+		pihole.enable = true;
 		
 		vaultwarden = {
 			enable = false;

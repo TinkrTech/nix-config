@@ -6,6 +6,7 @@
 	fileSystems."/mnt/vdev1" = {
 		device = "vdev1";
 		fsType = "zfs";
+		options = [ "nofail" "zfsutil" ];
 	};
 	# Needs to be unique for network disks.
 	# This is fine though since the disk is local
