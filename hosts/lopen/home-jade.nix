@@ -8,6 +8,16 @@
 	# Home Manager needs a bit of information about you and the paths it should
 	# manage.
 	home.username = "jade";
+	
+
+	programs.bash.shellAliases = {
+		spawn-ssh-agent = ''\
+		if ! $(ps -p $SSH_AGENT_PID > /dev/null); then\
+			eval "$(ssh-agent -s)";\
+			ssh-add ~/.ssh/stormfather;\
+		fi'';
+		rebuild-servers = "spawn-ssh-agent; deploy ~/nixos";
+	};
 
 	# This value determines the Home Manager release that your configuration is
 	# compatible with. This helps avoid breakage when a new Home Manager release
