@@ -17,6 +17,7 @@
 			ssh-add ~/.ssh/stormfather;\
 		fi'';
 		rebuild-servers = "spawn-ssh-agent; deploy ~/nixos";
+		ssh = "TERM=xterm-256color ssh"; # kitty fix
 	};
 
 	# This value determines the Home Manager release that your configuration is
