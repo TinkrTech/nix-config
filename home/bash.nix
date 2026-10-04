@@ -13,7 +13,8 @@ let
 		test-cfg = "sudo nixos-rebuild test --flake ~/nixos#${hostName}";
 		cleanup = "sudo nix-collect-garbage -d";
 		list-gen = "nixos-rebuild list-generations";
-		
+		current-gen = ''nixos-rebuild list-generations | awk '$8 == "True" { printf $1 }' '';
+
 		# Flake Aliases
 		update = "nix flake update --flake ~/nixos; rebuild";
 	};
