@@ -14,7 +14,7 @@
 		};
 
 		jellyfin = {
-			enable = false;
+			enable = true;
 			subdomain = "jellyfin";
 			port = 8096;
 			cache-dir = "/mnt/vdev1/configs/jellyfin/cache";
