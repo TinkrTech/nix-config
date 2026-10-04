@@ -12,6 +12,7 @@
 		../../modules/defaults/locale.nix
 		../../modules/defaults/nixvim.nix
 		../../modules/defaults/utils.nix
+		../../modules/defaults/garbage-collect.nix
 		../../modules/ssh.nix
 	];
 	sops.age.keyFile = "/home/admin/.config/sops/age/keys.txt";	
