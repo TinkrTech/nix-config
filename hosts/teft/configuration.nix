@@ -13,7 +13,7 @@
 	];
 	sops.age.keyFile = "/home/jade/.config/sops/age/keys.txt";
 	# Enable touchpad support (enabled by default in most desktopManager).
-	services.xserver.libinput.enable = true;
+	services.libinput.enable = true;
 
 	users.users."jade".packages = with pkgs; [	
 	];
