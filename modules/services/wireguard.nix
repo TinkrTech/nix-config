@@ -2,7 +2,8 @@
 let
 	cfg = config.hosted-services;
 	port = cfg.wireguard.port;
-	interface = "wg0";
+	external-iface = "enp7s0";
+	internal-iface = "wg0";
 	ipv4-prefix = "10.8.0";
 	ipv6-prefix = "fdcc:ad94:bacf:61a4::cafe";
 
@@ -17,10 +18,10 @@ let
 		iptables = if isv6 then "${pkgs.iptables}/bin/ip6tables" else "${pkgs.iptables}/bin/iptables";
 	in
 	''
-		${iptables} -t nat ${mode} POSTROUTING -s ${ipaddr} -o eth0 -j MASQUERADE 
+		${iptables} -t nat ${mode} POSTROUTING -s ${ipaddr} -o ${external-iface} -j MASQUERADE 
 		${iptables} ${mode} INPUT -p udp -m udp --dport ${toString port} -j ACCEPT 
-		${iptables} ${mode} FORWARD -i ${interface} -j ACCEPT
-		${iptables} ${mode} FORWARD -o ${interface} -j ACCEPT 
+		${iptables} ${mode} FORWARD -i ${internal-iface} -j ACCEPT
+		${iptables} ${mode} FORWARD -o ${internal-iface} -j ACCEPT 
 	'';
 
 	firewallRules = mode: lib.strings.join "\n" [ "${_firewallRules mode false}" "${_firewallRules mode true}" ];
@@ -37,9 +38,17 @@ in
 			"wg/ari-s24-preshared" = {};
 			"wg/lopen-preshared" = {};
 		};
-	
+		
+		networking.nat = {
+			enable = true;
+			enableIPv6 = true;
+			externalInterface = "enp7s0";
+			internalInterfaces = [ "wg0" ];
+		};
+		
+		networking.firewall.allowedUDPPorts = [ 37073 ];
 		networking.wg-quick.interfaces = {
-			"${interface}" = {
+			"${internal-iface}" = {
 				address = [
 					"${ipv4-prefix}.1/24"
 					"${ipv6-prefix}:1/112"

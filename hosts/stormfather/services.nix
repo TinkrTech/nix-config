@@ -6,6 +6,7 @@
 
 	hosted-services = {
 		domain = "tinkrtech.net";
+		ip = "10.0.0.99";
 		immich = {
 			enable = false;
 			subdomain = "photos";
