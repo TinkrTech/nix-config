@@ -16,6 +16,7 @@
 				contributors = "shortlog -sne --all";
 				drag = "blame -wCCC";
 				fixup = "commit --fixup HEAD";
+				changes = "diff --staged --word-diff";
 				lg = "log --oneline";
 				lgbt = "lg --graph main..HEAD";
 				cdiff = ''!f() { git diff "$1~1"..$1 --compact-summary; }; f'';
