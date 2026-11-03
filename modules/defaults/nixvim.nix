@@ -3,6 +3,7 @@ let
 	basic-bindings = [
 		{ mode = "n"; key = "<leader>so"; action = ":so<CR>"; }
 		{ mode = "n"; key = "<leader>e"; action = ":Ex<CR>"; }
+		{ mode = "n"; key = "<leader>vw"; action = ":set list!<CR>"; }
 	];
 
 	window-bindings = [
@@ -20,11 +21,11 @@ let
 	];
 
 	harpoon-bindings = [
-	 	{
-	 		mode = "n";
-	 		key = "<leader>a";
-	 		action.__raw = "function() require('harpoon'):list():add() end";
-	 		options.desc = "Harpoon: Add file";
+		{
+			mode = "n";
+			key = "<leader>a";
+			action.__raw = "function() require('harpoon'):list():add() end";
+			options.desc = "Harpoon: Add file";
 		}
 		{
 			mode = "n";
@@ -40,13 +41,13 @@ let
 		{
 			mode = "n";
 			key = "<C-j>";
-	 		action.__raw = "function() require('harpoon'):list():next() end";
+			action.__raw = "function() require('harpoon'):list():next() end";
 			options.desc = "Harpoon: Next";
 		}
 		{
 			mode = "n";
 			key = "<C-k>";
-	 		action.__raw = "function() require('harpoon'):list():prev() end";
+			action.__raw = "function() require('harpoon'):list():prev() end";
 			options.desc = "Harpoon: Prev";
 		}
 	];
@@ -58,12 +59,13 @@ in
 		# Suppress nixpkgs mismatch warning
 		nixpkgs.pkgs = pkgs;
 		defaultEditor = true;
-	 	opts = {
+		opts = {
 			number = true;
 			relativenumber = true;
 			tabstop = 4;
 			shiftwidth = 4;
 			wrap = false;
+			listchars = "tab:→\ ,trail:␣,precedes:«,extends:»,eol:⏎,space:•";
 
 			swapfile = false;
 			backup = false;
@@ -89,7 +91,21 @@ in
 			}
 		];
 		colorschemes.catppuccin.enable = true;
-	
+		
+		autoCmd = [
+			{
+				event = "BufWritePre";
+		pattern = "*.py";
+		callback.__raw = ''
+		function()
+		local save_cursor = vim.fn.winsaveview()
+		vim.cmd([[%s/\s\+$//e]])
+		vim.fn.winrestview(save_cursor)
+		end
+		'';
+			}
+		];
+
 		plugins = {
 			cmp = {
 				enable = true;
