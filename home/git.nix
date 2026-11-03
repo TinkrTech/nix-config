@@ -10,7 +10,8 @@
 			init.defaultBranch = "main";
 			core.sshCommand = "ssh -i ~/.ssh/github";
 			rebase.autosquash = true;
-
+			
+			diff.wsErrorHighlight = "all";
 			alias = {
 				alias = "config --get-regexp ^alias";
 				contributors = "shortlog -sne --all";
