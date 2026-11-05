@@ -1,16 +1,28 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
 	vanasa = {
-		uid = config.users.users.vanasa.uid;
-		gid = config.users.users.vanasa.gid;
+		uid = toString config.users.users.vanasa.uid;
+		group = config.users.users.vanasa.group;
+		gid = toString config.users.groups."${vanasa.group}".gid;
 	};
 	jellyfin = {
-		uid = config.users.users.jellyfin.uid;
-		gid = config.users.groups.jellyfin.gid;
+		uid = toString config.users.users.vanasa.uid;
+		group = config.users.users.vanasa.group;
+		gid = toString config.users.groups."${vanasa.group}".gid;
 	};
+	nfs_v3_ports = {
+		statdPort = 4000;
+		lockdPort = 4001;
+		mountdPort = 4002;
+	};
+	required_ports = [ 111 2049 20048 ] ++ builtins.attrValues nfs_v3_ports;
+in
 {
-	services.nfs = {
+	networking.firewall.allowedTCPPorts = required_ports;
+	networking.firewall.allowedUDPPorts = required_ports;
+	services.nfs.server = nfs_v3_ports // {
 		enable = true;
+		
 		# See https://wiki.archlinux.org/title/NFS#Server_configuration
 		# See https://man.archlinux.org/man/exports.5
 		#  - rw - Read/Write Perms
@@ -24,8 +36,8 @@ let
 		#  - anonuid - the user to map to based on the above rules
 		#  - anongid - the user to map to based on the above rules
 		exports = ''
-			/mnt/vdev1/Media 10.0.0.99/32(rw,sync,no_subtree_check,all_squash,anonuid=${jellyfin.uid},anongid=${jellyfin.gid})
-			/mnt/vdev1/Shared 10.0.0.99/32(rw,sync,no_subtree_check,all_squash,anonuid=${vanasa.uid},anongid=${vanasa.gid})
+			/mnt/vdev1/Media 10.0.0.99/255.0.0.0(rw,sync,no_subtree_check,all_squash,anonuid=${jellyfin.uid},anongid=${jellyfin.gid})
+			/mnt/vdev1/Shared 10.0.0.99/255.0.0.0(rw,sync,no_subtree_check,all_squash,anonuid=${vanasa.uid},anongid=${vanasa.gid})
 		'';
 	};
 

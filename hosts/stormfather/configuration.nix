@@ -4,7 +4,7 @@
 		./hardware-configuration.nix
 #		./graphics.nix
 		./services.nix
-#		./shares.nix
+		./shares.nix
 		./storage.nix
 		./users.nix
 		
