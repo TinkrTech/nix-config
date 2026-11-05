@@ -1,4 +1,5 @@
 # Repo maintenance
+- [ ] Look into NixOs Containers
 - [ ] Look into [starship](https://starship.rs)
     - [ ] See Juxtaposed/hyprland-terminal for inspo
 - [ ] Look into hyprland on lopen

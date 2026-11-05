@@ -11,10 +11,9 @@
 	
 
 	programs.bash.shellAliases = {
-		spawn-ssh-agent = ''\
-		if ! [[ -v SSH_AGENT_PID]] || ! $(ps -p $SSH_AGENT_PID > /dev/null); then\
-			eval "$(ssh-agent -s)";\
-			ssh-add ~/.ssh/stormfather;\
+		spawn-ssh-agent = ''if ! [[ -v SSH_AGENT_PID ]] || ! $(ps -p $SSH_AGENT_PID > /dev/null); then
+			eval "$(ssh-agent -s)";
+			ssh-add ~/.ssh/stormfather;
 		fi'';
 		rebuild-servers = "spawn-ssh-agent; deploy ~/nixos";
 		ssh = "TERM=xterm-256color ssh"; # kitty fix
