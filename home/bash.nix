@@ -17,6 +17,9 @@ let
 
 		# Flake Aliases
 		update = "nix flake update --flake ~/nixos; rebuild";
+		
+		# Networking aliases
+		list-ports = "netstat -tuln";
 	};
 in
 {

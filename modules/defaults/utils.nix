@@ -14,6 +14,7 @@
 		ripgrep
 		xclip
 		tree
+		unixtools.netstat
 	];
 	
 	# GPG
