@@ -15,6 +15,9 @@ in
 					"9.9.9.9" # Quad9
 					"1.1.1.1" # cloudflare
 				];
+				misc.dnsmasq_lines = [
+					"address=/${cfg.domain}/${cfg.ip}"
+				];
 				# local DNS resolving
 				dns.hosts = [ "${cfg.ip} ${cfg.domain}" ];
 			};

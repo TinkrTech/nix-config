@@ -6,23 +6,25 @@ in
 {
 	options.hosted-services.vaultwarden = (import ./_options.nix { inherit lib; }) // {
 		enable = lib.mkEnableOption "vaultwarden";
+		backup-dir = lib.mkOption {
+			type = lib.types.path;
+		};
 	};
 
 	config = lib.mkIf cfg.vaultwarden.enable {
 		sops.secrets = {
-			"vaultwarden/env-file" = {};
+			"vaultwarden-env-file" = { owner="vaultwarden"; group="vaultwarden"; };
 		};
-
+		
+		networking.firewall.allowedTCPPorts = [ cfg.vaultwarden.port ];
 		services.vaultwarden = {
 			enable = true;
-			package = pkgs.vaultwarden-postgresql;
+			# package = pkgs.vaultwarden-postgresql;
 			
-			configurePostgres = true;
+			# configurePostgres = true;
 			domain = url;
-
-			# TODO: create ADMIN_TOKEN and SMTP_PASSWORD env file
-			environmentFile = config.sops.secrets."vaultwarden/env-file".path;
-
+			
+			environmentFile = config.sops.secrets."vaultwarden-env-file".path;
 			config = {
 				SIGNUPS_ALLOWED = true;
 
@@ -42,11 +44,20 @@ in
 			};
 		};
 
-		services.caddy.virtualHosts."${url}".extraconfig = ''
+		services.caddy.virtualHosts."${url}".extraConfig = ''
 			encode zstd gzip
 			reverse_proxy ${cfg.ip}:${toString cfg.vaultwarden.port} {
 				header_up X-Real-IP {remote_host}
 			}
 		'';
+		
+		# systemd.services.vaultwarden.serviceConfig = {
+		# 	after = [ "zfs-import.target" "zfs-mount.service" "local-fs.target" ];
+		# 	requires = [ "zfs-mount.service" ];
+		# 	StateDirectory = "vaultwarden";
+		# 	ExecStartPre = [
+		# 		"${pkgs.coreutils}/bin/chown -R vaultwarden:vaultwarden ${cfg.vaultwarden.backup-dir}"
+		# 	];
+		# };
 	};
 }

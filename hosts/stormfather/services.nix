@@ -25,9 +25,10 @@
 		pihole.enable = true;
 		
 		vaultwarden = {
-			enable = false;
+			enable = true;
 			subdomain = "vault";
 			port = 8104;
+			backup-dir = "/mnt/vdev1/configs/VaultWarden";
 		};
 		
 		wireguard = {
