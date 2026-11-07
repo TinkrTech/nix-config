@@ -2,10 +2,11 @@
 {
 	imports = [ 
 		./hardware-configuration.nix
+		./networking.nix
+
 		../../modules/defaults
 		../../modules/desktop-envs/dwm
 		../../modules/nas-nfs.nix
-		../../modules/network.nix
 		../../modules/no-tpm.nix
 	];
 	sops.age.keyFile = "/home/jade/.config/sops/age/keys.txt";

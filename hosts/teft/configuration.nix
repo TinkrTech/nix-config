@@ -9,7 +9,6 @@
 		../../modules/defaults
 		../../modules/desktop-envs/cinnamon.nix
 		../../modules/nas-nfs.nix
-		../../modules/network.nix
 	];
 	sops.age.keyFile = "/home/jade/.config/sops/age/keys.txt";
 	# Enable touchpad support (enabled by default in most desktopManager).
@@ -23,6 +22,8 @@
 	environment.systemPackages = with pkgs; [
 		librewolf
 	];
+	
+	networking.networkmanager.enable = true;
 
 	# This value determines the NixOS release from which the default
 	# settings for stateful data, like file locations and database versions
