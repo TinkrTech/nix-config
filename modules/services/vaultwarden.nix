@@ -6,9 +6,6 @@ in
 {
 	options.hosted-services.vaultwarden = (import ./_options.nix { inherit lib; }) // {
 		enable = lib.mkEnableOption "vaultwarden";
-		backup-dir = lib.mkOption {
-			type = lib.types.path;
-		};
 	};
 
 	config = lib.mkIf cfg.vaultwarden.enable {
@@ -19,9 +16,11 @@ in
 		networking.firewall.allowedTCPPorts = [ cfg.vaultwarden.port ];
 		services.vaultwarden = {
 			enable = true;
-			# package = pkgs.vaultwarden-postgresql;
 			
-			# configurePostgres = true;
+			package = pkgs.vaultwarden-postgresql;
+			dbBackend = "postgresql";
+			configurePostgres = true;
+
 			domain = url;
 			
 			environmentFile = config.sops.secrets."vaultwarden-env-file".path;
@@ -50,14 +49,5 @@ in
 				header_up X-Real-IP {remote_host}
 			}
 		'';
-		
-		# systemd.services.vaultwarden.serviceConfig = {
-		# 	after = [ "zfs-import.target" "zfs-mount.service" "local-fs.target" ];
-		# 	requires = [ "zfs-mount.service" ];
-		# 	StateDirectory = "vaultwarden";
-		# 	ExecStartPre = [
-		# 		"${pkgs.coreutils}/bin/chown -R vaultwarden:vaultwarden ${cfg.vaultwarden.backup-dir}"
-		# 	];
-		# };
 	};
 }
