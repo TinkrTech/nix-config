@@ -22,13 +22,17 @@
 		gid = 3000;
 	};
 
+	users.groups.apps = {
+		gid = 568;
+	};
+
 	# High-privilege user for system admin
 	users.users.admin = {
 		isNormalUser = true;
 		description = "Admin";
 		uid = 1000;
 		group = "admin";
-		extraGroups = [ "vanasa" "jellyfin" "docker" "networkmanager" "wheel" ];
+		extraGroups = [ "vanasa" "apps" "docker" "networkmanager" "wheel" ];
 		packages = with pkgs; [
 		];
 
@@ -50,5 +54,12 @@
 			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFtiSdfFJ3zCLbrnsaMt81YSH9cKWEpPxm+pSSDn9eOY jade@lopen"
 		];
 		hashedPasswordFile = config.sops.secrets."vanasa/passwordHash".path;
+	};
+
+	users.users.apps = {
+		isSystemUser = true;
+		description = "apps";
+		uid = 568;
+		group = "apps";
 	};
 }

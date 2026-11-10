@@ -12,6 +12,9 @@ in
 		config-dir = lib.mkOption {
 			type = lib.types.path;
 		};
+		data-dir = lib.mkOption {
+			type = lib.types.path;
+		};
 	};
 
 	config = lib.mkIf cfg.jellyfin.enable {
@@ -24,8 +27,11 @@ in
 		services.jellyfin = {
 			enable = true;
 			openFirewall = true;
+			user = "apps";
+			group = "apps";
 			cacheDir = cfg.jellyfin.cache-dir;
 			configDir = cfg.jellyfin.config-dir;
+			dataDir = cfg.jellyfin.data-dir;
 		};
 
 		services.caddy.virtualHosts."${url}".extraConfig = ''

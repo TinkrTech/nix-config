@@ -15,11 +15,12 @@
 		};
 
 		jellyfin = {
-			enable = false;
+			enable = true;
 			subdomain = "jellyfin";
 			port = 8096;
 			cache-dir = "/mnt/vdev1/configs/jellyfin/cache";
-			config-dir = "/mnt/vdev1/configs/jellyfin/config"; 
+			config-dir = "/mnt/vdev1/configs/jellyfin/config/config"; 
+			data-dir = "/mnt/vdev1/configs/jellyfin/config";
 		};
 
 		pihole.enable = true;
@@ -28,7 +29,6 @@
 			enable = true;
 			subdomain = "vault";
 			port = 8104;
-			backup-dir = "/mnt/vdev1/configs/VaultWarden";
 		};
 		
 		wireguard = {

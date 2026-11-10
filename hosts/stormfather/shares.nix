@@ -6,9 +6,9 @@ let
 		gid = toString config.users.groups."${vanasa.group}".gid;
 	};
 	jellyfin = {
-		uid = toString config.users.users.vanasa.uid;
-		group = config.users.users.vanasa.group;
-		gid = toString config.users.groups."${vanasa.group}".gid;
+		uid = toString config.users.users.apps.uid;
+		group = config.users.users.apps.group;
+		gid = toString config.users.groups."${jellyfin.group}".gid;
 	};
 	nfs_v3_ports = {
 		statdPort = 4000;
