@@ -18,6 +18,7 @@
 			enable = true;
 			subdomain = "jellyfin";
 			port = 8096;
+			media-dir = "/mnt/vdev1/Media";
 			cache-dir = "/mnt/vdev1/configs/jellyfin/cache";
 			config-dir = "/mnt/vdev1/configs/jellyfin/config/config"; 
 			data-dir = "/mnt/vdev1/configs/jellyfin/config";
