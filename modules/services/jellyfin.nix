@@ -38,7 +38,7 @@ in
 			bindMounts = {
 				"/media" = {
 					hostPath = cfg.jellyfin.media-dir;
-					isReadOnly = true;
+					isReadOnly = false;
 				};
 				"/cache" = {
 					hostPath = cfg.jellyfin.cache-dir;
@@ -61,6 +61,11 @@ in
 					jellyfin-ffmpeg
 				];
 				
+				networking = {
+					defaultGateway = cfg.ip;
+					nameservers = [ "8.8.8.8" "9.9.9.9" ];
+				};
+				
 				users.users.apps = config.users.users.apps;
 				users.groups.apps = config.users.groups.apps;
 
@@ -75,8 +80,14 @@ in
 				};	
 			};
 		};
-		
+
+		networking.nat = {
+			enable = true;
+			internalInterfaces = [ "ve-jellyfin" ];
+			externalInterface = "enp7s0";
+		};
 		networking.firewall.allowedTCPPorts = [ cfg.jellyfin.port ];
+		
 		services.caddy.virtualHosts."${url}".extraConfig = ''
 			reverse_proxy ${cfg.ip}:${toString cfg.jellyfin.port}
 		'';
