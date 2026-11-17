@@ -2,6 +2,7 @@
 	description = "Jade's NixOS Config";
 	inputs = {
 		nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
+		nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 		nixvim = {
 			url = "github:nix-community/nixvim/nixos-26.05";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -25,8 +26,16 @@
 	
 	outputs = { self, nixpkgs, home-manager, deploy-rs, ... } @ inputs: 
 	let
+		system = "x86_64-linux";
+		
+		overlay-unstable = final: _: {
+			unstable = import inputs.nixpkgs-unstable {
+				inherit (final.stdenv.hostPlatform) system;
+				inherit (final) config;
+			};
+		};
+
 		lib = nixpkgs.lib;
-		pkgs = nixpkgs.legacyPackages."x86_64-linux";
 		inherit (lib.strings) removePrefix removeSuffix hasPrefix;
 	in
 	let
@@ -62,8 +71,8 @@
 	in
 	{
 		nixosConfigurations = nixpkgs.lib.genAttrs hosts (hostName: nixpkgs.lib.nixosSystem {
+			inherit system;
 			specialArgs = { inherit inputs; };
-			system = "x86_64-linux";
 			modules = [
 				{ networking.hostName = hostName; }
 				./hosts/${hostName}/configuration.nix
@@ -79,6 +88,9 @@
 					};
 					home-manager.users = hostHomesByUser hostName;
 				}
+				({config, pkgs, ...}: {
+					nixpkgs.overlays = [ overlay-unstable ];
+				})
 			];
 		});
 

@@ -8,7 +8,7 @@
 		domain = "tinkrtech.net";
 		ip = "10.0.0.99";
 		immich = {
-			enable = false;
+			enable = true;
 			subdomain = "photos";
 			port = 8098;
 			media-dir = "/mnt/vdev1/Photos";
