@@ -1,17 +1,15 @@
 { config, pkgs, lib, ... }:
 let
 	inherit (lib) types;
+	filterDir = filter: dir: lib.filterAttrs filter (builtins.readDir dir);
+	listModules = dir: map (s: dir + "/${s}") (
+		builtins.attrNames(
+			filterDir(name: _: name != "default.nix" && !lib.hasPrefix "_" name) dir
+		)
+	);
 in
 {
-	imports = [
-		./caddy.nix
-		./docker
-		./immich.nix
-		./jellyfin.nix
-		./pihole.nix
-		./vaultwarden.nix
-		./wireguard.nix
-	];
+	imports = listModules ./.;
 	
 	options.hosted-services	= {
 		ip = lib.mkOption {

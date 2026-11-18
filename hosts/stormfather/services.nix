@@ -25,7 +25,14 @@
 		};
 
 		pihole.enable = true;
-		
+	
+		uptime-kuma = {
+			enable = true;
+			subdomain = "status";
+			port = 8106;
+			data-dir = "/mnt/vdev1/configs/UptimeKuma";
+		};
+
 		vaultwarden = {
 			enable = true;
 			subdomain = "vault";

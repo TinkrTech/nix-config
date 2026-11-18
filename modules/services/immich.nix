@@ -2,8 +2,6 @@
 let
 	cfg = config.hosted-services;
 	url = "${cfg.immich.subdomain}.${cfg.domain}";
-	# Note: May need nixos-unstable version of immich
-	# See wiki.nixos.org/wiki/Immich for details
 in
 {
 	options.hosted-services.immich = (import ./_options.nix { inherit lib; }) // {
